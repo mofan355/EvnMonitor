@@ -27,107 +27,11 @@ Project File Date:  05/23/2026
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'code'
-compiling stm32f1xx_it.c...
-compiling stm32f1xx_hal_timebase_tim.c...
-compiling stm32f1xx_hal.c...
-compiling stm32f1xx_hal_pwr.c...
-compiling stm32f1xx_hal_gpio_ex.c...
-compiling stm32f1xx_hal_flash.c...
-compiling stm32f1xx_hal_msp.c...
-compiling stm32f1xx_hal_cortex.c...
-compiling gpio.c...
-compiling freertos.c...
-compiling stm32f1xx_hal_flash_ex.c...
-compiling stm32f1xx_hal_rcc.c...
-compiling stm32f1xx_hal_rcc_ex.c...
-compiling stm32f1xx_hal_gpio.c...
-compiling stm32f1xx_hal_dma.c...
-compiling list.c...
-compiling queue.c...
-compiling stream_buffer.c...
-compiling croutine.c...
-compiling timers.c...
-compiling heap_4.c...
 compiling OLED.c...
-.\RTE\_code\RTE_Components.h(17): warning:  #47-D: incompatible redefinition of macro "CMSIS_device_header" 
-  #define CMSIS_device_header "stm32f10x.h"
-..\User\OLED.c(11): warning:  #223-D: function "RCC_APB2PeriphClockCmd" declared implicitly
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
-..\User\OLED.c(11): error:  #20: identifier "RCC_APB2Periph_GPIOB" is undefined
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
-..\User\OLED.c(13): error:  #20: identifier "GPIO_InitTypeDef" is undefined
-  	GPIO_InitTypeDef GPIO_InitStructure;
-..\User\OLED.c(14): error:  #20: identifier "GPIO_Mode_Out_OD" is undefined
-   	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
-..\User\OLED.c(15): error:  #20: identifier "GPIO_Speed_50MHz" is undefined
-  	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-..\User\OLED.c(16): error:  #20: identifier "GPIO_Pin_8" is undefined
-  	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
-..\User\OLED.c(17): warning:  #223-D: function "GPIO_Init" declared implicitly
-   	GPIO_Init(GPIOB, &GPIO_InitStructure);
-..\User\OLED.c(18): error:  #20: identifier "GPIO_Pin_9" is undefined
-  	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
-..\User\OLED.c(21): warning:  #223-D: function "GPIO_WriteBit" declared implicitly
-  	
-LED_W_SCL(1);
-..\User\OLED.c(21): error:  #20: identifier "BitAction" is undefined
-  	
-LED_W_SCL(1);
-..\User\OLED.c(32): warning:  #223-D: function "GPIO_WriteBit" declared implicitly
-  	
-LED_W_SDA(1);
-..\User\OLED.c(32): error:  #20: identifier "GPIO_Pin_9" is undefined
-  	
-LED_W_SDA(1);
-..\User\OLED.c(32): error:  #20: identifier "BitAction" is undefined
-  	
-LED_W_SDA(1);
-..\User\OLED.c(33): error:  #20: identifier "GPIO_Pin_8" is undefined
-  	
-LED_W_SCL(1);
-..\User\OLED.c(45): warning:  #223-D: function "GPIO_WriteBit" declared implicitly
-  	
-LED_W_SDA(0);
-..\User\OLED.c(45): error:  #20: identifier "GPIO_Pin_9" is undefined
-  	
-LED_W_SDA(0);
-..\User\OLED.c(45): error:  #20: identifier "BitAction" is undefined
-  	
-LED_W_SDA(0);
-..\User\OLED.c(46): error:  #20: identifier "GPIO_Pin_8" is undefined
-  	
-LED_W_SCL(1);
-..\User\OLED.c(60): warning:  #223-D: function "GPIO_WriteBit" declared implicitly
-  		
-LED_W_SDA(!!(Byte & (0x80 >> i)));
-..\User\OLED.c(60): error:  #20: identifier "GPIO_Pin_9" is undefined
-  		
-LED_W_SDA(!!(Byte & (0x80 >> i)));
-..\User\OLED.c(60): error:  #20: identifier "BitAction" is undefined
-  		
-LED_W_SDA(!!(Byte & (0x80 >> i)));
-..\User\OLED.c(61): error:  #20: identifier "GPIO_Pin_8" is undefined
-  		
-LED_W_SCL(1);
-..\User\OLED.c(64): warning:  #223-D: function "GPIO_WriteBit" declared implicitly
-  	
-LED_W_SCL(1);	//额外的一个时钟，不处理应答信�?
-..\User\OLED.c(64): error:  #20: identifier "GPIO_Pin_8" is undefined
-  	
-LED_W_SCL(1);	//额外的一个时钟，不处理应答信�?
-..\User\OLED.c(64): error:  #20: identifier "BitAction" is undefined
-  	
-LED_W_SCL(1);	//额外的一个时钟，不处理应答信�?
-..\User\OLED.c: 8 warnings, 18 errors
-compiling event_groups.c...
-compiling tasks.c...
-compiling port.c...
-compiling system_stm32f1xx.c...
-compiling stm32f1xx_hal_exti.c...
-compiling stm32f1xx_hal_tim_ex.c...
-compiling stm32f1xx_hal_tim.c...
-compiling cmsis_os2.c...
-"code\code.axf" - 18 Error(s), 8 Warning(s).
+linking...
+Program Size: Code=9520 RO-data=360 RW-data=148 ZI-data=8060  
+FromELF: creating hex file...
+"code\code.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -150,8 +54,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Target not created.
-Build Time Elapsed:  00:00:09
+Build Time Elapsed:  00:00:02
 </pre>
 </body>
 </html>

@@ -1,22 +1,22 @@
-#include "stm32f10x.h"
+#include "stm32f1xx_hal.h" 
 #include "OLED_Font.h"
 
 /*引脚配置*/
-#define OLED_W_SCL(x)		GPIO_WriteBit(GPIOB, GPIO_Pin_8, (BitAction)(x))
-#define OLED_W_SDA(x)		GPIO_WriteBit(GPIOB, GPIO_Pin_9, (BitAction)(x))
+#define OLED_W_SCL(x)		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, (GPIO_PinState)(x))
+#define OLED_W_SDA(x)		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, (GPIO_PinState)(x))
 
 /*引脚初始化*/
 void OLED_I2C_Init(void)
 {
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    __HAL_RCC_GPIOB_CLK_ENABLE();
 	
 	GPIO_InitTypeDef GPIO_InitStructure;
- 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
- 	GPIO_Init(GPIOB, &GPIO_InitStructure);
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
- 	GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_InitStructure.Pin=GPIO_PIN_8;
+	GPIO_InitStructure.Mode=GPIO_MODE_OUTPUT_OD;
+	GPIO_InitStructure.Speed=GPIO_SPEED_FREQ_HIGH;
+ 	HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
+	GPIO_InitStructure.Pin = GPIO_PIN_9;
+ 	HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
 	
 	OLED_W_SCL(1);
 	OLED_W_SDA(1);
