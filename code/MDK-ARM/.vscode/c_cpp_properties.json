@@ -11,6 +11,7 @@
                 "e:\\code_embadded\\Freertos_Projects\\EvnMonitor\\code\\Middlewares\\Third_Party\\FreeRTOS\\Source\\portable\\RVDS\\ARM_CM3",
                 "e:\\code_embadded\\Freertos_Projects\\EvnMonitor\\code\\Drivers\\CMSIS\\Device\\ST\\STM32F1xx\\Include",
                 "e:\\code_embadded\\Freertos_Projects\\EvnMonitor\\code\\Drivers\\CMSIS\\Include",
+                "e:\\code_embadded\\Freertos_Projects\\EvnMonitor\\code\\User",
                 "e:\\code_embadded\\Freertos_Projects\\EvnMonitor\\code\\MDK-ARM",
                 "e:\\code_embadded\\Freertos_Projects\\EvnMonitor\\code\\Core\\Src",
                 "e:\\code_embadded\\Freertos_Projects\\EvnMonitor\\code\\Drivers\\STM32F1xx_HAL_Driver\\Src",
@@ -20,6 +21,7 @@
             "defines": [
                 "USE_HAL_DRIVER",
                 "STM32F103xB",
+                "CMSIS_device_header=<stm32f1xx.h>",
                 "__CC_ARM",
                 "__arm__",
                 "__align(x)=",

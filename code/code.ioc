@@ -2,7 +2,8 @@
 CAD.formats=
 CAD.pinconfig=
 CAD.provider=
-FREERTOS.IPParameters=Tasks01
+FREERTOS.INCLUDE_xTaskGetCurrentTaskHandle=1
+FREERTOS.IPParameters=Tasks01,INCLUDE_xTaskGetCurrentTaskHandle
 FREERTOS.Tasks01=defaultTask,24,128,StartDefaultTask,Default,NULL,Dynamic,NULL,NULL
 File.Version=6
 GPIO.groupedBy=
@@ -111,3 +112,4 @@ VP_FREERTOS_VS_CMSIS_V2.Signal=FREERTOS_VS_CMSIS_V2
 VP_SYS_VS_tim4.Mode=TIM4
 VP_SYS_VS_tim4.Signal=SYS_VS_tim4
 board=custom
+rtos.0.ip=FREERTOS
