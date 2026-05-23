@@ -1,0 +1,17 @@
+# Keil MDK编译产物
+*.axf
+*.hex
+*.bin
+*.o
+*.d
+*.crf
+*.map
+Objects/
+Listings/
+Debug/
+Release/
+# 系统缓存
+Thumbs.db
+.DS_Store
+#临时文件
+~$*.xlsx
