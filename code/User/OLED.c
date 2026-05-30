@@ -1485,18 +1485,20 @@ void OLED_DrawArc(int16_t X, int16_t Y, uint8_t Radius, int16_t StartAngle, int1
 
 /*****************江协科技|版权所有****************/
 /*****************jiangxiekeji.com*****************/
-
-void OLEDTestTask(void *argument)
+#include "DHT11.h"
+#include "Delay_us.h"
+void OLED_FlashTask(void *argument)
 {
 	while(1)
 	{
-		OLED_Clear();
+		// OLED_Clear();
+		// OLED_Update();
+
+		OLED_ShowString(0,0,"温湿度:",OLED_8X16);
+		OLED_ShowString(0,23,"光照强度:",OLED_8X16);
+		OLED_ShowString(0,46,"烟雾浓度:",OLED_8X16);
+		Show_DHT11UI();
 		OLED_Update();
-		
-		OLED_ShowString(1,0,"温湿度:",OLED_8X16);
-		OLED_ShowString(1,23,"光照强度:",OLED_8X16);
-		OLED_ShowString(1,46,"烟雾浓度:",OLED_8X16);
-		OLED_Update();
-		osDelay(2000);
+		osDelay(1000);
 	}
 }

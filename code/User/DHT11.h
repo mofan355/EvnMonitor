@@ -1,0 +1,12 @@
+#ifndef __DHT11_H
+#define __DHT11_H
+
+#include "stm32f1xx_hal.h"
+
+void DHT11_data(GPIO_PinState PinState);
+void DHT11_Init(void);
+void DHT11Receive(uint8_t *buf);
+void Show_DHT11UI(void);
+void DHT11Task(void *argument);
+
+#endif

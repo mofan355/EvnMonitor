@@ -77,6 +77,10 @@ virtualFolder:
         - path: ../User/OLED.h
         - path: ../User/OLED_Data.c
         - path: ../User/OLED_Data.h
+        - path: ../User/DHT11.c
+        - path: ../User/DHT11.h
+        - path: ../User/Delay_us.c
+        - path: ../User/Delay_us.h
       folders: []
     - name: ::CMSIS
       files: []

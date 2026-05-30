@@ -37,7 +37,9 @@
 "code\port.o"
 "code\oled.o"
 "code\oled_data.o"
---strict --scatter "code\code.sct"
+"code\dht11.o"
+"code\delay_us.o"
+--library_type=microlib --strict --scatter "code\code.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list "code.map" -o code\code.axf
