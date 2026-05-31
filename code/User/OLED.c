@@ -687,16 +687,24 @@ void OLED_ShowString(int16_t X, int16_t Y, char *String, uint8_t FontSize)
 		{
 			/*遍历整个字模库，从字模库中寻找此字符的数据*/
 			/*如果找到最后一个字符（定义为空字符串），则表示字符未在字模库定义，停止寻找*/
-			for (pIndex = 0; strcmp(OLED_CF16x16[pIndex].Index, "") != 0; pIndex ++)
-			{
-				/*找到匹配的字符*/
-				if (strcmp(OLED_CF16x16[pIndex].Index, SingleChar) == 0)
-				{
-					break;		//跳出循环，此时pIndex的值为指定字符的索引
-				}
-			}
+			// for (pIndex = 0; strcmp(OLED_CF16x16[pIndex].Index, "") != 0; pIndex ++)
+			// {
+			// 	/*找到匹配的字符*/
+			// 	if (strcmp(OLED_CF16x16[pIndex].Index, SingleChar) == 0)
+			// 	{
+			// 		break;		//跳出循环，此时pIndex的值为指定字符的索引
+			// 	}
+			// }
 			if (FontSize == OLED_8X16)		//给定字体为8*16点阵
 			{
+				for (pIndex = 0; strcmp(OLED_CF16x16[pIndex].Index, "") != 0; pIndex ++)
+				{
+					/*找到匹配的字符*/
+					if (strcmp(OLED_CF16x16[pIndex].Index, SingleChar) == 0)
+					{
+						break;		//跳出循环，此时pIndex的值为指定字符的索引
+					}
+				}
 				/*将字模库OLED_CF16x16的指定数据以16*16的图像格式显示*/
 				OLED_ShowImage(X + XOffset, Y, 16, 16, OLED_CF16x16[pIndex].Data);
 				XOffset += 16;
@@ -1487,18 +1495,26 @@ void OLED_DrawArc(int16_t X, int16_t Y, uint8_t Radius, int16_t StartAngle, int1
 /*****************jiangxiekeji.com*****************/
 #include "DHT11.h"
 #include "Delay_us.h"
+uint16_t flash_num = 0;
+void Show_UI(void)
+{
+	OLED_ShowImage(0,0,50,64,Frame);
+	OLED_ShowImage(51,0,2,64,boundry);
+	OLED_ShowString(1,3,"温湿度",OLED_8X16);
+	OLED_ShowString(56,3,"光照强度:",OLED_8X16);
+	OLED_ShowString(56,34,"烟雾浓度:",OLED_8X16);
+	Show_DHT11UI();
+	OLED_Update();
+}
+
 void OLED_FlashTask(void *argument)
 {
 	while(1)
 	{
-		// OLED_Clear();
-		// OLED_Update();
 
-		OLED_ShowString(0,0,"温湿度:",OLED_8X16);
-		OLED_ShowString(0,23,"光照强度:",OLED_8X16);
-		OLED_ShowString(0,46,"烟雾浓度:",OLED_8X16);
-		Show_DHT11UI();
-		OLED_Update();
+		Show_UI();
+		// Show_DHT11_AllData();
+		// flash_num++;
 		osDelay(1000);
 	}
 }

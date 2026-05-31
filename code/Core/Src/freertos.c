@@ -25,7 +25,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "OLED.h"
+#include "DHT11.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +46,20 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-
+osThreadId_t OLED_FlashTaskHandle;
+const osThreadAttr_t OLED_FlashTask_attributes = {
+  .name = "OLED_FlashTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
+/* USER CODE END Variables */
+/* Definitions for defaultTask */
+osThreadId_t DHT11TaskHandle;
+const osThreadAttr_t DHT11Task_attributes = {
+  .name = "DHT11Task",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal2,
+};
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -96,6 +110,8 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
+  OLED_FlashTaskHandle = osThreadNew(OLED_FlashTask, NULL, &OLED_FlashTask_attributes);
+  DHT11TaskHandle = osThreadNew(DHT11Task, NULL, &DHT11Task_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */

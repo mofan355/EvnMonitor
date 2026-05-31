@@ -20,8 +20,9 @@ typedef struct
 	char Index[3];					//汉字索引，空间为3字节
 #endif
 	
-	uint8_t Data[32];				//字模数据
+	uint8_t Data[32];				//字模数据OLED_CF16x16
 } ChineseCell_t;
+
 
 /*ASCII字模数据声明*/
 extern const uint8_t OLED_F8x16[][16];
@@ -31,17 +32,12 @@ extern const uint8_t OLED_F12x24[][36];
 extern const ChineseCell_t OLED_CF16x16[];
 
 /*图像数据声明*/
-extern const uint8_t Diode[];
+extern const uint8_t Celsius[];
+extern const uint8_t boundry[];
 extern const uint8_t Return[];
 extern const uint8_t Frame[];
 extern const uint8_t Menu_Graph[][128];
-extern const uint8_t Ground[];
 extern const uint8_t Barrier[][48];
-extern const uint8_t Cloud[];
-extern const uint8_t Dino[][48];
-extern const uint8_t Eyebrow[][32];
-extern const uint8_t Mouth[];
-extern const uint8_t Battery[];
 /*按照上面的格式，在这个位置加入新的图像数据声明*/
 //...
 
