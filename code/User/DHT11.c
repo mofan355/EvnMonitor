@@ -4,6 +4,7 @@
 #include "Delay_us.h"
 #include <stdio.h>
 #include <string.h>
+#include "event_groups.h"
 
 uint8_t count= 0;
 uint8_t DHT11_data_buf[5] = {1};
@@ -40,7 +41,7 @@ void DHT11Start(void)
         delay_us(1);
         if(timeout > 1000) 
         {
-            OLED_ShowString(55,23, "Error1", OLED_8X16);
+            OLED_ShowString(1,23, "Err1", OLED_8X16);
             OLED_Update();
             return;
         }
@@ -52,7 +53,7 @@ void DHT11Start(void)
         delay_us(1);
         if(timeout > 200) 
         {
-            OLED_ShowString(55,23, "Error2", OLED_8X16);
+            OLED_ShowString(1,23, "Err2", OLED_8X16);
             OLED_Update();
             return;
         }
@@ -74,7 +75,7 @@ void DHT11Receive(uint8_t *buf)
                 delay_us(1);
                 if(t > 200) 
                 {
-                    OLED_ShowString(65,23, "Error3", OLED_8X16);
+                    OLED_ShowString(1,23, "Err3", OLED_8X16);
                     OLED_Update();
                     return;
                 }
@@ -94,13 +95,13 @@ int DHT11_Check(uint8_t *buf)
 }
 
 void Show_DHT11UI(void)
-{
-    OLED_ShowNum(100,50,count,2,OLED_8X16);
+{   
+    OLED_ShowNum(80,50,count,2,OLED_8X16);
     if(DHT11_Check(DHT11_data_buf) == 0)
     {
-        OLED_Printf(1,46,OLED_8X16,"%d.%d%%",DHT11_data_buf[0],DHT11_data_buf[1]);
-        OLED_Printf(1,23,OLED_8X16,"%d.%d",DHT11_data_buf[2],DHT11_data_buf[3]);
-        OLED_ShowImage(33, 23, 12, 16, Celsius);
+        OLED_Printf(1,22,OLED_8X16,"%d.%d",DHT11_data_buf[2],DHT11_data_buf[3]);
+        OLED_Printf(1,43,OLED_8X16,"%d.%d%%",DHT11_data_buf[0],DHT11_data_buf[1]);
+        OLED_ShowImage(33, 22, 12, 16, Celsius);
     }
     else 
     {
@@ -117,10 +118,12 @@ void Show_DHT11_AllData(void)
     OLED_Update();
 }
 
+extern EventGroupHandle_t KeyFinishedEventGroup;
 void DHT11Task(void *argument)
 {
     while(1)
     {
+        xEventGroupWaitBits(KeyFinishedEventGroup, 1<<0, pdFALSE, pdFALSE, portMAX_DELAY);
         DHT11Start();
         DHT11Receive(DHT11_data_buf);
         count++;

@@ -81,6 +81,8 @@ virtualFolder:
         - path: ../User/DHT11.h
         - path: ../User/Delay_us.c
         - path: ../User/Delay_us.h
+        - path: ../User/Key.c
+        - path: ../User/Key.h
       folders: []
     - name: ::CMSIS
       files: []

@@ -39,6 +39,7 @@
 "code\oled_data.o"
 "code\dht11.o"
 "code\delay_us.o"
+"code\key.o"
 --library_type=microlib --strict --scatter "code\code.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

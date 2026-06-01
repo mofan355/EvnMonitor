@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "OLED.h"
 #include "DHT11.h"
+#include "event_groups.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,14 +53,14 @@ const osThreadAttr_t OLED_FlashTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* USER CODE END Variables */
-/* Definitions for defaultTask */
 osThreadId_t DHT11TaskHandle;
 const osThreadAttr_t DHT11Task_attributes = {
   .name = "DHT11Task",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal2,
 };
+
+EventGroupHandle_t KeyFinishedEventGroup;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -116,6 +117,7 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_EVENTS */
   /* add events, ... */
+  KeyFinishedEventGroup = xEventGroupCreate();
   /* USER CODE END RTOS_EVENTS */
 
 }

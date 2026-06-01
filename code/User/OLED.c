@@ -1495,26 +1495,62 @@ void OLED_DrawArc(int16_t X, int16_t Y, uint8_t Radius, int16_t StartAngle, int1
 /*****************jiangxiekeji.com*****************/
 #include "DHT11.h"
 #include "Delay_us.h"
+#include "Key.h"
 uint16_t flash_num = 0;
+uint8_t option=1;
 void Show_UI(void)
 {
-	OLED_ShowImage(0,0,50,64,Frame);
-	OLED_ShowImage(51,0,2,64,boundry);
-	OLED_ShowString(1,3,"温湿度",OLED_8X16);
-	OLED_ShowString(56,3,"光照强度:",OLED_8X16);
+	OLED_ShowImage(51,0,76,64,boundary);
+	OLED_ShowString(1,1,"温湿度",OLED_8X16);
+	OLED_ShowString(56,1,"光照强度:",OLED_8X16);
 	OLED_ShowString(56,34,"烟雾浓度:",OLED_8X16);
 	Show_DHT11UI();
+
+	if(Key_Num==1)
+	{
+		option--;
+		if(option<1) option=3;
+	}
+	else if(Key_Num==2) 
+	{
+		option++;
+		if(option>3) option=1;
+	}
+	OLED_ShowNum(80,16,Key_Num,2,OLED_8X16);
+	
+	if(option==1) 
+	{
+		OLED_ReverseArea(1,1,48,16);
+		OLED_ReverseArea(1,22,44,16);
+		OLED_ReverseArea(1,43,40,16);
+	}
+	else if(option==2) 
+	{
+		OLED_ReverseArea(56,1,72,16);
+		OLED_ReverseArea(80,16,16,16);
+	}
+	else if(option==3) 
+	{
+		OLED_ReverseArea(56,34,72,16);
+		OLED_ReverseArea(80,50,16,16);
+	}
 	OLED_Update();
+
+	Key_Num=0;
 }
 
 void OLED_FlashTask(void *argument)
 {
 	while(1)
 	{
+		if(Key_GetState())
+		{
+			Key_GetNum();
+		}
 
 		Show_UI();
 		// Show_DHT11_AllData();
 		// flash_num++;
-		osDelay(1000);
+		osDelay(100);
 	}
 }

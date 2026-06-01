@@ -102,6 +102,7 @@ int main(void)
 
   OLED_Init();
   DHT11_Init();
+  Key_Init();
 
   HAL_Delay(3000);
   /* USER CODE END 2 */
