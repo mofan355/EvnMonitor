@@ -3,6 +3,9 @@
 
 #include "stm32f1xx_hal.h"
 
+#define DHT11_PORT GPIOA
+#define DHT11_PIN GPIO_PIN_1
+
 void DHT11_data(GPIO_PinState PinState);
 void DHT11_Init(void);
 void DHT11Receive(uint8_t *buf);

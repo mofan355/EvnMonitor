@@ -8,6 +8,6 @@
 extern uint8_t Key_Num;
 void Key_Init(void);
 void Key_GetNum(void);
-uint8_t Key_GetState();
+uint8_t Key_GetState(void);
 
 #endif

@@ -28,7 +28,10 @@
 /* USER CODE BEGIN Includes */
 #include "OLED.h"
 #include "DHT11.h"
-#include "stm32f1xx_hal.h"
+#include "Key.h"
+#include "adc.h"
+#include "BH1750.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -92,7 +95,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_I2C1_Init();
+  // MX_I2C1_Init();
   MX_TIM2_Init();
   MX_USART1_UART_Init();
   MX_TIM3_Init();
@@ -103,7 +106,8 @@ int main(void)
   OLED_Init();
   DHT11_Init();
   Key_Init();
-
+  MX_ADC1_Init();
+  BH1750_Init();
   HAL_Delay(3000);
   /* USER CODE END 2 */
 
@@ -203,6 +207,7 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
+    
   }
   /* USER CODE END Error_Handler_Debug */
 }

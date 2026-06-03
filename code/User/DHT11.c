@@ -6,24 +6,39 @@
 #include <string.h>
 #include "event_groups.h"
 
-uint8_t count= 0;
+extern osEventFlagsId_t KeyFinishedEventGroup;
+
+uint8_t DHT11_count= 0;
 uint8_t DHT11_data_buf[5] = {1};
 GPIO_InitTypeDef GPIO_InitStructure;
 
 void DHT11_data(GPIO_PinState PinState)
 {
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, PinState);
+    HAL_GPIO_WritePin(DHT11_PORT, DHT11_PIN, PinState);
+}
+
+static void DHT11_OUTMode(void)
+{
+    GPIO_InitStructure.Pin = DHT11_PIN;
+    GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_OD;
+    GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
+    GPIO_InitStructure.Pull = GPIO_PULLUP;
+    HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStructure);
+}
+
+static void DHT11_INMode(void)
+{
+    GPIO_InitStructure.Pin = DHT11_PIN;
+    GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStructure.Pull = GPIO_PULLUP;
+    HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStructure);
 }
 
 void DHT11_Init(void)
 {
-    __HAL_RCC_GPIOB_CLK_ENABLE();
+    __HAL_RCC_GPIOA_CLK_ENABLE();
     
-    GPIO_InitStructure.Pin = GPIO_PIN_0;
-    GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_OD;
-    GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
-    GPIO_InitStructure.Pull = GPIO_PULLUP;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
+    DHT11_OUTMode();
     DHT11_data(GPIO_PIN_SET);
 }
 
@@ -34,29 +49,36 @@ void DHT11Start(void)
     DHT11_data(GPIO_PIN_SET);
     delay_us(40);
 
+    DHT11_INMode();
+
     uint16_t timeout = 0;
-    while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET)
+    while(HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN) == GPIO_PIN_RESET)
     {
         timeout++;
         delay_us(1);
+        OLED_ShowNum(1,23, timeout, 4, OLED_8X16);
+        OLED_Update();
         if(timeout > 1000) 
         {
-            OLED_ShowString(1,23, "Err1", OLED_8X16);
+            OLED_ShowString(1,7, "Err1", OLED_8X16);
             OLED_Update();
             return;
         }
     }
     timeout = 0;
-    while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_SET)
+    while(HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN) == GPIO_PIN_SET)
     {
         timeout++;
         delay_us(1);
         if(timeout > 200) 
         {
-            OLED_ShowString(1,23, "Err2", OLED_8X16);
+            OLED_ClearArea(41,22,4,16);
+            OLED_ShowString(1,22, "Erro2", OLED_8X16);
             OLED_Update();
             return;
         }
+        // OLED_ShowNum(1,23, timeout, 4, OLED_8X16);
+        // OLED_Update();
     }
 }
 
@@ -68,14 +90,14 @@ void DHT11Receive(uint8_t *buf)
         for(int j=0;j<8;j++)
         {
             uint8_t t=0;
-            while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET);
-            while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_SET) 
+            while(HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN) == GPIO_PIN_RESET);
+            while(HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN) == GPIO_PIN_SET) 
             {
                 t++;
                 delay_us(1);
                 if(t > 200) 
                 {
-                    OLED_ShowString(1,23, "Err3", OLED_8X16);
+                    OLED_ShowString(1,43, "Erro3", OLED_8X16);
                     OLED_Update();
                     return;
                 }
@@ -96,37 +118,43 @@ int DHT11_Check(uint8_t *buf)
 
 void Show_DHT11UI(void)
 {   
-    OLED_ShowNum(80,50,count,2,OLED_8X16);
-    if(DHT11_Check(DHT11_data_buf) == 0)
+    // OLED_ShowNum(1,22,DHT11_count,5,OLED_8X16);
+    // return;
+    if(DHT11_data_buf[0]+DHT11_data_buf[1]>0)
     {
-        OLED_Printf(1,22,OLED_8X16,"%d.%d",DHT11_data_buf[2],DHT11_data_buf[3]);
-        OLED_Printf(1,43,OLED_8X16,"%d.%d%%",DHT11_data_buf[0],DHT11_data_buf[1]);
-        OLED_ShowImage(33, 22, 12, 16, Celsius);
-    }
-    else 
-    {
-        OLED_ShowString(1,23, "Error", OLED_8X16);
-        OLED_ShowString(1,46, "Error", OLED_8X16);
+        if(DHT11_Check(DHT11_data_buf) == 0)
+        {
+            OLED_Printf(1,22,OLED_8X16,"%d.%d",DHT11_data_buf[2],DHT11_data_buf[3]);
+            OLED_Printf(1,43,OLED_8X16,"%d.%d%%",DHT11_data_buf[0],DHT11_data_buf[1]);
+            OLED_ShowImage(33, 22, 12, 16, Celsius);
+        }
+        else 
+        {
+            OLED_ShowString(1,23, "Error", OLED_8X16);
+            OLED_ShowString(1,46, "Error", OLED_8X16);
+        }
     }
 }
 
 void Show_DHT11_AllData(void)
 {
-    OLED_Printf(0,0,OLED_8X16,"%d,%d",DHT11_data_buf[0],DHT11_data_buf[1]);
-    OLED_Printf(0,16,OLED_8X16,"%d,%d",DHT11_data_buf[2],DHT11_data_buf[3]);
-    OLED_Printf(0,32,OLED_8X16,"%d",DHT11_data_buf[4]);
+    OLED_Printf(50,0,OLED_8X16,"%d,%d",DHT11_data_buf[0],DHT11_data_buf[1]);
+    OLED_Printf(50,16,OLED_8X16,"%d,%d",DHT11_data_buf[2],DHT11_data_buf[3]);
+    OLED_Printf(50,32,OLED_8X16,"%d",DHT11_data_buf[4]);
     OLED_Update();
 }
 
-extern EventGroupHandle_t KeyFinishedEventGroup;
+extern osMutexId_t Mutex1Handle;
 void DHT11Task(void *argument)
 {
     while(1)
     {
-        xEventGroupWaitBits(KeyFinishedEventGroup, 1<<0, pdFALSE, pdFALSE, portMAX_DELAY);
+        osEventFlagsWait(KeyFinishedEventGroup,0x01,osFlagsWaitAny|osFlagsNoClear,osWaitForever);
+        osMutexAcquire(Mutex1Handle,osWaitForever);
         DHT11Start();
         DHT11Receive(DHT11_data_buf);
-        count++;
-        osDelay(3000);
+        // DHT11_count++;
+        osMutexRelease(Mutex1Handle);
+        osDelay(4000);
     }
 }

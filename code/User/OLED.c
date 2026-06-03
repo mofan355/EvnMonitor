@@ -80,7 +80,7 @@
   * 随后调用OLED_Update函数或OLED_UpdateArea函数
   * 才会将显存数组的数据发送到OLED硬件，进行显示
   */
-uint8_t OLED_DisplayBuf[8][128];
+static uint8_t OLED_DisplayBuf[8][128];
 
 /*********************全局变量*/
 
@@ -1496,6 +1496,8 @@ void OLED_DrawArc(int16_t X, int16_t Y, uint8_t Radius, int16_t StartAngle, int1
 #include "DHT11.h"
 #include "Delay_us.h"
 #include "Key.h"
+#include "MQ2.h"
+#include "BH1750.h"
 uint16_t flash_num = 0;
 uint8_t option=1;
 void Show_UI(void)
@@ -1505,7 +1507,9 @@ void Show_UI(void)
 	OLED_ShowString(56,1,"光照强度:",OLED_8X16);
 	OLED_ShowString(56,34,"烟雾浓度:",OLED_8X16);
 	Show_DHT11UI();
-
+	Show_MQ2UI();
+	Show_BH1750UI();
+	
 	if(Key_Num==1)
 	{
 		option--;
@@ -1516,7 +1520,7 @@ void Show_UI(void)
 		option++;
 		if(option>3) option=1;
 	}
-	OLED_ShowNum(80,16,Key_Num,2,OLED_8X16);
+	// OLED_ShowNum(80,16,Key_Num,2,OLED_8X16);
 	
 	if(option==1) 
 	{
@@ -1524,7 +1528,7 @@ void Show_UI(void)
 		OLED_ReverseArea(1,22,44,16);
 		OLED_ReverseArea(1,43,40,16);
 	}
-	else if(option==2) 
+	else if(option==2)
 	{
 		OLED_ReverseArea(56,1,72,16);
 		OLED_ReverseArea(80,16,16,16);

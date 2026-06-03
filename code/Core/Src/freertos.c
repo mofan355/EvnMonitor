@@ -27,6 +27,8 @@
 /* USER CODE BEGIN Includes */
 #include "OLED.h"
 #include "DHT11.h"
+#include "MQ2.h"
+#include "BH1750.h"
 #include "event_groups.h"
 /* USER CODE END Includes */
 
@@ -50,17 +52,45 @@
 osThreadId_t OLED_FlashTaskHandle;
 const osThreadAttr_t OLED_FlashTask_attributes = {
   .name = "OLED_FlashTask",
-  .stack_size = 128 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
+
 osThreadId_t DHT11TaskHandle;
 const osThreadAttr_t DHT11Task_attributes = {
   .name = "DHT11Task",
-  .stack_size = 128 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal2,
 };
 
-EventGroupHandle_t KeyFinishedEventGroup;
+osThreadId_t MQ2TaskHandle;
+const osThreadAttr_t MQ2Task_attributes = {
+  .name = "MQ2Task",
+  .stack_size = 512 * 4,
+  .priority = (osPriority_t) osPriorityNormal2,
+};
+
+osThreadId_t BH1750TaskHandle;
+const osThreadAttr_t BH1750Task_attributes = {
+  .name = "BH1750Task",
+  .stack_size = 512 * 4,
+  .priority = (osPriority_t) osPriorityNormal3,
+};
+
+
+// EventGroupHandle_t KeyFinishedEventGroup;
+osEventFlagsId_t KeyFinishedEventGroup;
+const osEventFlagsAttr_t KeyFinishedEventGroup_attributes={
+  .name="KeyFinishedEventGroup",
+  .attr_bits=0,
+};
+
+
+osMutexId_t Mutex1Handle;
+const osMutexAttr_t Mutex1_attributes ={
+  .name="Mutex1",
+  .attr_bits=osMutexPrioInherit,
+};
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -91,6 +121,7 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
+  Mutex1Handle=osMutexNew(&Mutex1_attributes);
   /* USER CODE END RTOS_MUTEX */
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
@@ -113,11 +144,14 @@ void MX_FREERTOS_Init(void) {
   /* add threads, ... */
   OLED_FlashTaskHandle = osThreadNew(OLED_FlashTask, NULL, &OLED_FlashTask_attributes);
   DHT11TaskHandle = osThreadNew(DHT11Task, NULL, &DHT11Task_attributes);
+  MQ2TaskHandle = osThreadNew(MQ2Task, NULL, &MQ2Task_attributes);
+  BH1750TaskHandle = osThreadNew(BH1750Task,NULL, &BH1750Task_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
   /* add events, ... */
-  KeyFinishedEventGroup = xEventGroupCreate();
+  KeyFinishedEventGroup = osEventFlagsNew(&KeyFinishedEventGroup_attributes);
+  osEventFlagsSet(KeyFinishedEventGroup,0x01);
   /* USER CODE END RTOS_EVENTS */
 
 }

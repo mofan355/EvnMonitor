@@ -29,6 +29,7 @@ virtualFolder:
                 - path: ../Core/Src/stm32f1xx_it.c
                 - path: ../Core/Src/stm32f1xx_hal_msp.c
                 - path: ../Core/Src/stm32f1xx_hal_timebase_tim.c
+                - path: ../Core/Src/adc.c
               folders: []
     - name: Drivers
       files: []
@@ -50,6 +51,8 @@ virtualFolder:
             - path: ../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.c
             - path: ../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c
             - path: ../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c
+            - path: ../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc.c
+            - path: ../Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_adc_ex.c
           folders: []
         - name: CMSIS
           files:
@@ -83,6 +86,10 @@ virtualFolder:
         - path: ../User/Delay_us.h
         - path: ../User/Key.c
         - path: ../User/Key.h
+        - path: ../User/MQ2.c
+        - path: ../User/MQ2.h
+        - path: ../User/BH1750.c
+        - path: ../User/BH1750.h
       folders: []
     - name: ::CMSIS
       files: []
