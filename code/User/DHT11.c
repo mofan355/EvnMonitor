@@ -4,12 +4,13 @@
 #include "Delay_us.h"
 #include <stdio.h>
 #include <string.h>
-#include "event_groups.h"
+#include "Key.h"
 
 extern osEventFlagsId_t KeyFinishedEventGroup;
 
 uint8_t DHT11_count= 0;
 uint8_t DHT11_data_buf[5] = {1};
+uint8_t DHT11_AlertLine[4]={80,0,38,0};
 GPIO_InitTypeDef GPIO_InitStructure;
 
 void DHT11_data(GPIO_PinState PinState)
@@ -56,7 +57,7 @@ void DHT11Start(void)
     {
         timeout++;
         delay_us(1);
-        OLED_ShowNum(1,23, timeout, 4, OLED_8X16);
+        OLED_ShowNum(50,23, timeout, 4, OLED_8X16);
         OLED_Update();
         if(timeout > 1000) 
         {
@@ -70,7 +71,7 @@ void DHT11Start(void)
     {
         timeout++;
         delay_us(1);
-        if(timeout > 200) 
+        if(timeout > 1000) 
         {
             OLED_ClearArea(41,22,4,16);
             OLED_ShowString(1,22, "Erro2", OLED_8X16);
@@ -136,6 +137,119 @@ void Show_DHT11UI(void)
     }
 }
 
+void Show_DHT11UI2(void)
+{
+    int option=5;
+    Key_Num=0;
+    OLED_Clear();
+    OLED_Update();
+    while(1)
+    {
+        if(Key_GetState())
+        {
+            Key_GetNum();
+        }
+
+        if(Key_Num==1)
+        {
+            option--;
+            if(option<1) option=5;
+        }else if(Key_Num==2)
+        {
+            option++;
+            if(option>5) option=1;
+        }else if(Key_Num==3)
+        {
+            Key_Num=0;
+            if(option==5) break;
+            Show_DHT11_AlterValueUI(option);
+        }
+        
+        OLED_ShowString(7,0,"温度报警线设置",OLED_8X16);
+        OLED_Printf(43,16,OLED_8X16,"%02d.%02d",DHT11_AlertLine[0],DHT11_AlertLine[1]);
+        OLED_Printf(43,32,OLED_8X16,"%02d.%02d",DHT11_AlertLine[2],DHT11_AlertLine[3]);
+        OLED_ShowImage(101,47,16,16,Return);
+
+        if(option==1)
+        {
+            OLED_ReverseArea(43,16,16,16);
+        }
+        else if(option==2)
+        {
+            OLED_ReverseArea(67,16,16,16);
+        }
+        else if(option==3)
+        {
+            OLED_ReverseArea(43,32,16,16);
+        }
+        else if(option==4)
+        {
+            OLED_ReverseArea(67,32,16,16);
+        }
+        else if (option==5)
+        {
+            OLED_ReverseArea(101,47,16,16);
+        }
+        OLED_Update();
+        Key_Num=0;
+        osDelay(100);
+    }
+}
+
+void Show_DHT11_AlterValueUI(uint8_t option)
+{
+    OLED_Clear();
+    OLED_Update();
+    while(1)
+    {
+        Key_Num=0;
+        if(Key_GetState())
+        {
+            Key_GetNum();
+        }
+
+        if(Key_Num==1) DHT11_AlertLine[option-1]++;
+        else if(Key_Num==2) 
+        {
+            DHT11_AlertLine[option-1]--;
+            if(DHT11_AlertLine[option-1]==255||DHT11_AlertLine[option-1]>99)
+            {
+                DHT11_AlertLine[option-1]=0;
+            }
+        }
+        else if(Key_Num==3) 
+        {
+            Key_Num=0;
+            break;
+        }
+
+        OLED_ShowString(7,0,"温度报警线设置",OLED_8X16);
+        OLED_Printf(43,16,OLED_8X16,"%02d.%02d",DHT11_AlertLine[0],DHT11_AlertLine[1]);
+        OLED_Printf(43,32,OLED_8X16,"%02d.%02d",DHT11_AlertLine[2],DHT11_AlertLine[3]);
+        OLED_ShowImage(101,47,16,16,Return);
+
+        if(option==1)
+        {
+            OLED_ReverseArea(43,16,16,16);
+        }
+        else if(option==2)
+        {
+            OLED_ReverseArea(67,16,16,16);
+        }
+        else if(option==3)
+        {
+            OLED_ReverseArea(43,32,16,16);
+        }
+        else if(option==4)
+        {
+            OLED_ReverseArea(67,32,16,16);
+        }
+        OLED_Update();
+
+        osDelay(100);
+    }
+}
+
 void Show_DHT11_AllData(void)
 {
     OLED_Printf(50,0,OLED_8X16,"%d,%d",DHT11_data_buf[0],DHT11_data_buf[1]);
@@ -153,7 +267,7 @@ void DHT11Task(void *argument)
         osMutexAcquire(Mutex1Handle,osWaitForever);
         DHT11Start();
         DHT11Receive(DHT11_data_buf);
-        // DHT11_count++;
+        DHT11_count++;
         osMutexRelease(Mutex1Handle);
         osDelay(4000);
     }

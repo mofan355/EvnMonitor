@@ -1520,9 +1520,18 @@ void Show_UI(void)
 		option++;
 		if(option>3) option=1;
 	}
+	else if(Key_Num==3){
+		if(option==1) Show_DHT11UI2();
+		else if(option==2) Show_BH1750UI2();
+		else if(option==3){
+
+		}
+		OLED_Clear();
+		OLED_Update();
+	}
 	// OLED_ShowNum(80,16,Key_Num,2,OLED_8X16);
 	
-	if(option==1) 
+	if(option==1)
 	{
 		OLED_ReverseArea(1,1,48,16);
 		OLED_ReverseArea(1,22,44,16);

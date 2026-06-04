@@ -16,10 +16,10 @@ void Key_Init(void)
 
 }
 
-extern EventGroupHandle_t KeyFinishedEventGroup;
+extern osEventFlagsId_t KeyFinishedEventGroup;
 void Key_GetNum()
 {
-    xEventGroupClearBits(KeyFinishedEventGroup, 1<<0);
+    osEventFlagsClear(KeyFinishedEventGroup,0x01);
     if(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_11) == GPIO_PIN_RESET)
     {
         delay_us(20000);
@@ -41,7 +41,7 @@ void Key_GetNum()
         delay_us(20000);
         Key_Num = 3;
     }
-    xEventGroupSetBits(KeyFinishedEventGroup, 1<<0);
+    osEventFlagsSet(KeyFinishedEventGroup, 1<<0);
 }
 
 uint8_t Key_GetState()

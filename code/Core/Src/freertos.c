@@ -142,10 +142,10 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
-  OLED_FlashTaskHandle = osThreadNew(OLED_FlashTask, NULL, &OLED_FlashTask_attributes);
+  // OLED_FlashTaskHandle = osThreadNew(OLED_FlashTask, NULL, &OLED_FlashTask_attributes);
   DHT11TaskHandle = osThreadNew(DHT11Task, NULL, &DHT11Task_attributes);
-  MQ2TaskHandle = osThreadNew(MQ2Task, NULL, &MQ2Task_attributes);
-  BH1750TaskHandle = osThreadNew(BH1750Task,NULL, &BH1750Task_attributes);
+  // MQ2TaskHandle = osThreadNew(MQ2Task, NULL, &MQ2Task_attributes);
+  // BH1750TaskHandle = osThreadNew(BH1750Task,NULL, &BH1750Task_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */

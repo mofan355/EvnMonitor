@@ -55,7 +55,7 @@ void MQ2Task(void *argument)
         osEventFlagsWait(KeyFinishedEventGroup,0x01,osFlagsWaitAny|osFlagsNoClear,osWaitForever);
         osMutexAcquire(Mutex1Handle,osWaitForever);
         MQ2_GetData();
-        // MQ2_count++;
+        MQ2_count++;
         osMutexRelease(Mutex1Handle);
         osDelay(4000);
     }

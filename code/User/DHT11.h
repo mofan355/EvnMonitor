@@ -10,6 +10,8 @@ void DHT11_data(GPIO_PinState PinState);
 void DHT11_Init(void);
 void DHT11Receive(uint8_t *buf);
 void Show_DHT11UI(void);
+void Show_DHT11UI2(void);
+void Show_DHT11_AlterValueUI(uint8_t option);
 int DHT11_Check(uint8_t *buf);
 void Show_DHT11_AllData(void);
 

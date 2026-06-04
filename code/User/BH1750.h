@@ -39,6 +39,8 @@ void BH1750_ReceiveByte(uint8_t *Byte);
 void BH1750_SendCmd(uint8_t addr,uint8_t cmd);
 void BH1750_ReceiveData(uint8_t addr,uint8_t *data,uint16_t len);
 void Show_BH1750UI(void);
+void Show_BH1750UI2(void);
+void Show_BH1750_AlterValueUI(uint8_t option);
 void BH1750Task(void *argument);
 
 #endif

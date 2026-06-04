@@ -3,11 +3,13 @@
 #include "cmsis_os.h"
 #include "event_groups.h"
 #include "Delay_us.h"
+#include "Key.h"
 
 extern I2C_HandleTypeDef hi2c1;
 
 uint8_t BH1750_count=0;
 uint8_t BH1750_Buf[2];
+uint16_t BH1750_AlertLine=5000;
 float BH1750_LightIntensity = 0;
 
 void BH1750_Init_Cmd(void)
@@ -42,6 +44,7 @@ void BH1750_ReceiveData(uint8_t addr,uint8_t *data,uint16_t len)
 /*end*/
 
 //软件i2c
+/*begin*/
 void BH1750_W_SCL(uint8_t state)
 {
     HAL_GPIO_WritePin(BH1750_Port, BH1750_SCL_Pin, (GPIO_PinState)!!state);
@@ -151,6 +154,7 @@ void BH1750_ReceiveData(uint8_t addr,uint8_t *data,uint16_t len)
         else BH1750_SendACK(1);
     }
 }
+/*end*/
 
 /*
 极暗（黑夜 / 月夜）
@@ -192,6 +196,132 @@ void Show_BH1750UI(void)
     }
 }
 
+void Show_BH1750UI2(void)
+{
+    int option=5;
+    Key_Num=0;
+    OLED_Clear();
+    OLED_Update();
+    while(1)
+    {
+        if(Key_GetState())
+        {
+            Key_GetNum();
+        }
+
+        if(Key_Num==1)
+        {
+            option--;
+            if(option<1) option=5;
+        }else if(Key_Num==2)
+        {
+            option++;
+            if(option>5) option=1;
+        }else if(Key_Num==3)
+        {
+            Key_Num=0;
+            if(option==5) break;
+            Show_BH1750_AlterValueUI(option);
+        }
+        
+        OLED_ShowString(7,0,"光照报警线设置",OLED_8X16);
+        OLED_Printf(43,28,OLED_8X16,"%04d",BH1750_AlertLine);
+        OLED_ShowImage(101,47,16,16,Return);
+
+        if(option==1)
+        {
+            OLED_ReverseArea(43,28,8,16);
+        }
+        else if(option==2)
+        {
+            OLED_ReverseArea(51,28,8,16);
+        }
+        else if(option==3)
+        {
+            OLED_ReverseArea(59,28,8,16);
+        }
+        else if(option==4)
+        {
+            OLED_ReverseArea(67,28,8,16);
+        }
+        else if (option==5)
+        {
+            OLED_ReverseArea(101,47,16,16);
+        }
+        OLED_Update();
+        Key_Num=0;
+        osDelay(100);
+    }
+}
+
+void Show_BH1750_AlterValueUI(uint8_t option)
+{
+    OLED_Clear();
+    OLED_Update();
+    uint16_t weight=1000;
+    for(int i=0;i<option-1;i++)
+    {
+        weight/=10;
+    }
+
+    uint8_t temp=0;
+    
+    while(1)
+    {
+        Key_Num=0;
+        if(Key_GetState())
+        {
+            Key_GetNum();
+        }
+
+        temp=BH1750_AlertLine/weight%10;
+
+        if(Key_Num==1) 
+        {
+            if(temp==9) BH1750_AlertLine-=9*weight;
+            else BH1750_AlertLine+=weight;
+        }
+        else if(Key_Num==2) 
+        {
+            if(temp==0) BH1750_AlertLine+=9*weight;
+            else BH1750_AlertLine-=weight;
+        }
+        else if(Key_Num==3) 
+        {
+            Key_Num=0;
+            break;
+        }
+
+        OLED_ShowString(7,0,"光照报警线设置",OLED_8X16);
+        OLED_Printf(43,28,OLED_8X16,"%04d",BH1750_AlertLine);
+        OLED_ShowImage(101,47,16,16,Return);
+
+         if(option==1)
+        {
+            OLED_ReverseArea(43,28,8,16);
+        }
+        else if(option==2)
+        {
+            OLED_ReverseArea(51,28,8,16);
+        }
+        else if(option==3)
+        {
+            OLED_ReverseArea(59,28,8,16);
+        }
+        else if(option==4)
+        {
+            OLED_ReverseArea(67,28,8,16);
+        }
+        else if (option==5)
+        {
+            OLED_ReverseArea(101,47,16,16);
+        }
+        OLED_Update();
+
+        osDelay(100);
+    }
+}
+
 extern osEventFlagsId_t KeyFinishedEventGroup;
 extern osMutexId_t Mutex1Handle;
 void BH1750Task(void *argument)
@@ -203,8 +333,8 @@ void BH1750Task(void *argument)
         BH1750_Init_Cmd();
         osDelay(200);
         BH1750_ReceiveData(BH1750_ADDR_L,BH1750_Buf, 2);
-        BH1750_LightIntensity = (float)((BH1750_Buf[0]<<8)|BH1750_Buf[1]) / 1.2;
-        // BH1750_count++;
+        BH1750_LightIntensity = (float)(((uint16_t)BH1750_Buf[0]<<8)|BH1750_Buf[1]) / 1.2;
+        BH1750_count++;
         osMutexRelease(Mutex1Handle);
         
         osDelay(4000);
