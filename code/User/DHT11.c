@@ -27,14 +27,6 @@ static void DHT11_OUTMode(void)
     HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStructure);
 }
 
-static void DHT11_INMode(void)
-{
-    GPIO_InitStructure.Pin = DHT11_PIN;
-    GPIO_InitStructure.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStructure.Pull = GPIO_PULLUP;
-    HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStructure);
-}
-
 void DHT11_Init(void)
 {
     __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -50,16 +42,11 @@ void DHT11Start(void)
     DHT11_data(GPIO_PIN_SET);
     delay_us(40);
 
-    DHT11_INMode();
-
     uint16_t timeout = 0;
-    while(HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN) == GPIO_PIN_SET);
     while(HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN) == GPIO_PIN_RESET)
     {
         timeout++;
         delay_us(1);
-        OLED_ShowNum(50,23, timeout, 4, OLED_8X16);
-        OLED_Update();
         if(timeout > 1000) 
         {
             OLED_ShowString(1,7, "Err1", OLED_8X16);
@@ -167,25 +154,25 @@ void Show_DHT11UI2(void)
         }
         
         OLED_ShowString(7,0,"温度报警线设置",OLED_8X16);
-        OLED_Printf(43,16,OLED_8X16,"%02d.%02d",DHT11_AlertLine[0],DHT11_AlertLine[1]);
-        OLED_Printf(43,32,OLED_8X16,"%02d.%02d",DHT11_AlertLine[2],DHT11_AlertLine[3]);
+        OLED_Printf(23,16,OLED_8X16,"湿度:%02d.%02d",DHT11_AlertLine[0],DHT11_AlertLine[1]);
+        OLED_Printf(23,32,OLED_8X16,"温度:%02d.%02d",DHT11_AlertLine[2],DHT11_AlertLine[3]);
         OLED_ShowImage(101,47,16,16,Return);
 
         if(option==1)
         {
-            OLED_ReverseArea(43,16,16,16);
+            OLED_ReverseArea(63,16,16,16);
         }
         else if(option==2)
         {
-            OLED_ReverseArea(67,16,16,16);
+            OLED_ReverseArea(87,16,16,16);
         }
         else if(option==3)
         {
-            OLED_ReverseArea(43,32,16,16);
+            OLED_ReverseArea(63,32,16,16);
         }
         else if(option==4)
         {
-            OLED_ReverseArea(67,32,16,16);
+            OLED_ReverseArea(87,32,16,16);
         }
         else if (option==5)
         {
@@ -225,25 +212,25 @@ void Show_DHT11_AlterValueUI(uint8_t option)
         }
 
         OLED_ShowString(7,0,"温度报警线设置",OLED_8X16);
-        OLED_Printf(43,16,OLED_8X16,"%02d.%02d",DHT11_AlertLine[0],DHT11_AlertLine[1]);
-        OLED_Printf(43,32,OLED_8X16,"%02d.%02d",DHT11_AlertLine[2],DHT11_AlertLine[3]);
+        OLED_Printf(23,16,OLED_8X16,"湿度:%02d.%02d",DHT11_AlertLine[0],DHT11_AlertLine[1]);
+        OLED_Printf(23,32,OLED_8X16,"温度:%02d.%02d",DHT11_AlertLine[2],DHT11_AlertLine[3]);
         OLED_ShowImage(101,47,16,16,Return);
 
         if(option==1)
         {
-            OLED_ReverseArea(43,16,16,16);
+            OLED_ReverseArea(63,16,16,16);
         }
         else if(option==2)
         {
-            OLED_ReverseArea(67,16,16,16);
+            OLED_ReverseArea(87,16,16,16);
         }
         else if(option==3)
         {
-            OLED_ReverseArea(43,32,16,16);
+            OLED_ReverseArea(63,32,16,16);
         }
         else if(option==4)
         {
-            OLED_ReverseArea(67,32,16,16);
+            OLED_ReverseArea(87,32,16,16);
         }
         OLED_Update();
 

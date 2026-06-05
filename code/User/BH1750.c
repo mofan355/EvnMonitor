@@ -4,9 +4,11 @@
 #include "event_groups.h"
 #include "Delay_us.h"
 #include "Key.h"
+#include "stdio.h"
 
 extern I2C_HandleTypeDef hi2c1;
 
+int ACK=0;
 uint8_t BH1750_count=0;
 uint8_t BH1750_Buf[2];
 uint16_t BH1750_AlertLine=5000;
@@ -67,6 +69,9 @@ void BH1750_Init(void)
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     HAL_GPIO_Init(BH1750_Port, &GPIO_InitStruct);
+
+    BH1750_W_SDA(0);
+    BH1750_W_SCL(0);
 }
 
 void BH1750_Start(void)
@@ -119,6 +124,8 @@ void BH1750_ReceiveByte(uint8_t *Byte)
 {
     *Byte=0;
     BH1750_W_SCL(0);
+    BH1750_W_SDA(1);
+    
     for(int i=0;i<8;i++)
     {
         BH1750_W_SCL(1);
@@ -136,9 +143,11 @@ void BH1750_SendCmd(uint8_t addr,uint8_t cmd)
 {
     BH1750_Start();
     BH1750_SendByte(addr<<1);
-    BH1750_ReceiveACK();
+    ACK=BH1750_ReceiveACK();
+    while(ACK==1);
     BH1750_SendByte(cmd);
-    BH1750_ReceiveACK();
+    ACK=BH1750_ReceiveACK();
+    while(ACK==1);
     BH1750_Stop();
 }
 
@@ -146,7 +155,9 @@ void BH1750_ReceiveData(uint8_t addr,uint8_t *data,uint16_t len)
 {
     BH1750_Start();
     BH1750_SendByte((addr<<1)|0x01);
-    BH1750_ReceiveACK();
+    ACK=BH1750_ReceiveACK();
+    while (ACK==1);
+    
     for(int i=0;i<len;i++)
     {
         BH1750_ReceiveByte(&data[i]);
