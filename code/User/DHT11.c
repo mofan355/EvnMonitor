@@ -11,18 +11,19 @@ GPIO_InitTypeDef GPIO_InitStructure;
 
 void DHT11_data(GPIO_PinState PinState)
 {
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, PinState);
+    HAL_GPIO_WritePin(DHT11_GPIOPort, DHT11_GPIOPIN, PinState);
 }
 
 void DHT11_Init(void)
 {
     __HAL_RCC_GPIOB_CLK_ENABLE();
+    __HAL_RCC_GPIOA_CLK_ENABLE();
     
-    GPIO_InitStructure.Pin = GPIO_PIN_0;
+    GPIO_InitStructure.Pin = DHT11_GPIOPIN;
     GPIO_InitStructure.Mode = GPIO_MODE_OUTPUT_OD;
     GPIO_InitStructure.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStructure.Pull = GPIO_PULLUP;
-    HAL_GPIO_Init(GPIOB, &GPIO_InitStructure);
+    HAL_GPIO_Init(DHT11_GPIOPort, &GPIO_InitStructure);
     DHT11_data(GPIO_PIN_SET);
 }
 
@@ -34,7 +35,7 @@ void DHT11Start(void)
     delay_us(40);
 
     uint16_t timeout = 0;
-    while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET)
+    while(HAL_GPIO_ReadPin(DHT11_GPIOPort, DHT11_GPIOPIN) == GPIO_PIN_RESET)
     {
         timeout++;
         delay_us(1);
@@ -46,7 +47,7 @@ void DHT11Start(void)
         }
     }
     timeout = 0;
-    while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_SET)
+    while(HAL_GPIO_ReadPin(DHT11_GPIOPort, DHT11_GPIOPIN) == GPIO_PIN_SET)
     {
         timeout++;
         delay_us(1);
@@ -67,8 +68,8 @@ void DHT11Receive(uint8_t *buf)
         for(int j=0;j<8;j++)
         {
             uint8_t t=0;
-            while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_RESET);
-            while(HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_0) == GPIO_PIN_SET) 
+            while(HAL_GPIO_ReadPin(DHT11_GPIOPort, DHT11_GPIOPIN) == GPIO_PIN_RESET);
+            while(HAL_GPIO_ReadPin(DHT11_GPIOPort, DHT11_GPIOPIN) == GPIO_PIN_SET) 
             {
                 t++;
                 delay_us(1);
