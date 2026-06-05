@@ -53,6 +53,7 @@ void DHT11Start(void)
     DHT11_INMode();
 
     uint16_t timeout = 0;
+    while(HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN) == GPIO_PIN_SET);
     while(HAL_GPIO_ReadPin(DHT11_PORT, DHT11_PIN) == GPIO_PIN_RESET)
     {
         timeout++;
