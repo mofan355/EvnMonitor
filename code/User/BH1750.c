@@ -348,6 +348,6 @@ void BH1750Task(void *argument)
         BH1750_count++;
         osMutexRelease(Mutex1Handle);
         
-        osDelay(4000);
+        osDelay(1000);
     }
 }

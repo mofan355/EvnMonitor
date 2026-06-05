@@ -257,6 +257,6 @@ void DHT11Task(void *argument)
         DHT11Receive(DHT11_data_buf);
         DHT11_count++;
         osMutexRelease(Mutex1Handle);
-        osDelay(4000);
+        osDelay(1000);
     }
 }
