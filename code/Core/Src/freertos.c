@@ -57,7 +57,7 @@ const osThreadAttr_t OLED_FlashTask_attributes = {
 osThreadId_t DHT11TaskHandle;
 const osThreadAttr_t DHT11Task_attributes = {
   .name = "DHT11Task",
-  .stack_size = 128 * 4,
+  .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityNormal2,
 };
 /* USER CODE END Variables */
