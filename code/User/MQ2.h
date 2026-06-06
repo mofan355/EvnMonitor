@@ -8,6 +8,8 @@ extern float MQ2_Data;
 
 void MQ2_GetData(void);
 void Show_MQ2UI(void);
+void Show_MQ2UI2(void);
+void Show_MQ2_AlterValueUI(uint8_t option);
 void MQ2Task(void *argument);
 
 #endif

@@ -1507,8 +1507,8 @@ void Show_UI(void)
 	OLED_ShowString(56,1,"光照强度:",OLED_8X16);
 	OLED_ShowString(56,34,"烟雾浓度:",OLED_8X16);
 	Show_DHT11UI();
-	Show_MQ2UI();
 	Show_BH1750UI();
+	Show_MQ2UI();
 	
 	if(Key_Num==1)
 	{
@@ -1523,9 +1523,7 @@ void Show_UI(void)
 	else if(Key_Num==3){
 		if(option==1) Show_DHT11UI2();
 		else if(option==2) Show_BH1750UI2();
-		else if(option==3){
-
-		}
+		else if(option==3) Show_MQ2UI2();
 		OLED_Clear();
 		OLED_Update();
 	}
@@ -1540,12 +1538,12 @@ void Show_UI(void)
 	else if(option==2)
 	{
 		OLED_ReverseArea(56,1,72,16);
-		OLED_ReverseArea(80,16,16,16);
+		OLED_ReverseArea(67,16,48,16);
 	}
 	else if(option==3) 
 	{
 		OLED_ReverseArea(56,34,72,16);
-		OLED_ReverseArea(80,50,16,16);
+		OLED_ReverseArea(68,50,48,16);
 	}
 	OLED_Update();
 

@@ -9,6 +9,7 @@ extern osEventFlagsId_t KeyFinishedEventGroup;
 uint8_t MQ2_count=0;
 uint32_t MQ2_ADC_Data=0;
 float MQ2_Data=0;
+float MQ2_AlertLine=2.0f;
 
 void MQ2_GetData(void)
 {
@@ -31,19 +32,129 @@ void Show_MQ2UI(void)
     // return;
     if(MQ2_Data < 0.5f)
     {
-        OLED_ShowString(56,50,"无气体",OLED_8X16);
+        OLED_ShowString(68,50,"无气体",OLED_8X16);
     }
     else if(MQ2_Data>=0.5f && MQ2_Data < 3.0f)
     {
-        OLED_ShowString(56,50,"正  常",OLED_8X16);
+        OLED_ShowString(68,50,"正  常",OLED_8X16);
     }
     else if(MQ2_Data>=3.0f && MQ2_Data < 4.0f)
     {
-        OLED_ShowString(56,50,"异  常",OLED_8X16);
+        OLED_ShowString(68,50,"异  常",OLED_8X16);
     }
     else if(MQ2_Data >= 4.0f)
     {
-        OLED_ShowString(56,50,"危  险",OLED_8X16);
+        OLED_ShowString(68,50,"危  险",OLED_8X16);
+    }
+}
+
+void Show_MQ2UI2(void)
+{
+    int option=3;
+    Key_Num=0;
+    OLED_Clear();
+    OLED_Update();
+    while(1)
+    {
+        if(Key_GetState())
+        {
+            Key_GetNum();
+        }
+
+        if(Key_Num==1)
+        {
+            option--;
+            if(option<1) option=3;
+        }else if(Key_Num==2)
+        {
+            option++;
+            if(option>3) option=1;
+        }else if(Key_Num==3)
+        {
+            Key_Num=0;
+            if(option==3) break;
+            Show_MQ2_AlterValueUI(option);
+        }
+        
+        OLED_ShowString(7,0,"烟雾报警线设置",OLED_8X16);
+        OLED_Printf(43,28,OLED_8X16,"%.1f",MQ2_AlertLine);
+        OLED_ShowImage(101,47,16,16,Return);
+
+        if(option==1)
+        {
+            OLED_ReverseArea(43,28,8,16);
+        }
+        else if(option==2)
+        {
+            OLED_ReverseArea(59,28,8,16);
+        }
+        else if (option==3)
+        {
+            OLED_ReverseArea(101,47,16,16);
+        }
+        OLED_Update();
+        Key_Num=0;
+        osDelay(100);
+    }
+}
+
+void Show_MQ2_AlterValueUI(uint8_t option)
+{
+    OLED_Clear();
+    OLED_Update();
+
+    while(1)
+    {
+        Key_Num=0;
+        if(Key_GetState())
+        {
+            Key_GetNum();
+        }
+
+        if(Key_Num==1) 
+        {
+            if(option==1) 
+            {
+                if(MQ2_AlertLine>=9) MQ2_AlertLine-=9;
+                else MQ2_AlertLine+=1;
+            }
+            else if(option==2) 
+            {
+                MQ2_AlertLine+=0.1f;
+            }
+        }
+        else if(Key_Num==2) 
+        {
+            if(option==1) 
+            {
+                if(MQ2_AlertLine>=1) MQ2_AlertLine-=1;
+            }
+            else if(option==2) 
+            {
+                if(MQ2_AlertLine>0) MQ2_AlertLine-=0.1f;
+            }
+        }
+        else if(Key_Num==3) 
+        {
+            Key_Num=0;
+            break;
+        }
+
+        OLED_ShowString(7,0,"烟雾报警线设置",OLED_8X16);
+        OLED_Printf(43,28,OLED_8X16,"%.1f",MQ2_AlertLine);
+        OLED_ShowImage(101,47,16,16,Return);
+
+         if(option==1)
+        {
+            OLED_ReverseArea(43,28,8,16);
+        }
+        else if(option==2)
+        {
+            OLED_ReverseArea(59,28,8,16);
+        }
+        OLED_Update();
+
+        osDelay(100);
     }
 }
 

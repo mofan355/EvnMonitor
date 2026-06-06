@@ -187,23 +187,23 @@ void Show_BH1750UI(void)
     // if(BH1750_LightIntensity==0) return;
     if(BH1750_LightIntensity < 10)
     {
-        OLED_ShowString(56, 16, "极  暗",OLED_8X16);
+        OLED_ShowString(68, 16, "极  暗",OLED_8X16);
     }
     else if(BH1750_LightIntensity >= 10 && BH1750_LightIntensity < 50)
     {
-        OLED_ShowString(56, 16, "较  暗",OLED_8X16);
+        OLED_ShowString(68, 16, "较  暗",OLED_8X16);
     }
     else if(BH1750_LightIntensity >= 50 && BH1750_LightIntensity < 500)
     {
-        OLED_ShowString(56, 16, "中  等",OLED_8X16);
+        OLED_ShowString(68, 16, "中  等",OLED_8X16);
     }
     else if(BH1750_LightIntensity >= 500 && BH1750_LightIntensity < 5000)
     {
-        OLED_ShowString(56, 16, "较  亮",OLED_8X16);
+        OLED_ShowString(68, 16, "较  亮",OLED_8X16);
     }
     else
     {
-        OLED_ShowString(56, 16, "极  亮",OLED_8X16);
+        OLED_ShowString(68, 16, "极  亮",OLED_8X16);
     }
 }
 
@@ -322,10 +322,6 @@ void Show_BH1750_AlterValueUI(uint8_t option)
         else if(option==4)
         {
             OLED_ReverseArea(67,28,8,16);
-        }
-        else if (option==5)
-        {
-            OLED_ReverseArea(101,47,16,16);
         }
         OLED_Update();
 
