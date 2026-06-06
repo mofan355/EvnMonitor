@@ -144,10 +144,10 @@ void BH1750_SendCmd(uint8_t addr,uint8_t cmd)
     BH1750_Start();
     BH1750_SendByte(addr<<1);
     ACK=BH1750_ReceiveACK();
-    while(ACK==1);
+    // while(ACK==1);
     BH1750_SendByte(cmd);
     ACK=BH1750_ReceiveACK();
-    while(ACK==1);
+    // while(ACK==1);
     BH1750_Stop();
 }
 
@@ -156,7 +156,7 @@ void BH1750_ReceiveData(uint8_t addr,uint8_t *data,uint16_t len)
     BH1750_Start();
     BH1750_SendByte((addr<<1)|0x01);
     ACK=BH1750_ReceiveACK();
-    while (ACK==1);
+    // while (ACK==1);
     
     for(int i=0;i<len;i++)
     {
