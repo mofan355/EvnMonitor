@@ -10,7 +10,7 @@ extern osEventFlagsId_t KeyFinishedEventGroup;
 
 uint8_t DHT11_count= 0;
 uint8_t DHT11_data_buf[5] = {1};
-uint8_t DHT11_AlertLine[4]={80,0,38,0};
+uint8_t DHT11_AlertLine[4]={70,0,35,0};
 GPIO_InitTypeDef GPIO_InitStructure;
 
 void DHT11_data(GPIO_PinState PinState)
@@ -240,6 +240,16 @@ void Show_DHT11_AllData(void)
     OLED_Printf(50,16,OLED_8X16,"%d,%d",DHT11_data_buf[2],DHT11_data_buf[3]);
     OLED_Printf(50,32,OLED_8X16,"%d",DHT11_data_buf[4]);
     OLED_Update();
+}
+
+uint8_t DHT11_GetCondition(void)
+{
+    if(DHT11_data_buf[0]>DHT11_AlertLine[0]||
+        DHT11_data_buf[2]>DHT11_AlertLine[2])
+    {
+        return 1;
+    }
+    return 0;
 }
 
 extern osMutexId_t Mutex1Handle;

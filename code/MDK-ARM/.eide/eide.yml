@@ -90,6 +90,12 @@ virtualFolder:
         - path: ../User/MQ2.h
         - path: ../User/BH1750.c
         - path: ../User/BH1750.h
+        - path: ../User/LED.c
+        - path: ../User/LED.h
+        - path: ../User/Servo.c
+        - path: ../User/Servo.h
+        - path: ../User/Buzzer.c
+        - path: ../User/Buzzer.h
       folders: []
     - name: ::CMSIS
       files: []

@@ -1493,11 +1493,15 @@ void OLED_DrawArc(int16_t X, int16_t Y, uint8_t Radius, int16_t StartAngle, int1
 
 /*****************江协科技|版权所有****************/
 /*****************jiangxiekeji.com*****************/
-#include "DHT11.h"
 #include "Delay_us.h"
 #include "Key.h"
+#include "DHT11.h"
 #include "MQ2.h"
 #include "BH1750.h"
+#include "Servo.h"
+#include "LED.h"
+#include "Buzzer.h"
+
 uint16_t flash_num = 0;
 uint8_t option=1;
 void Show_UI(void)
@@ -1560,8 +1564,20 @@ void OLED_FlashTask(void *argument)
 		}
 
 		Show_UI();
-		// Show_DHT11_AllData();
-		// flash_num++;
-		osDelay(100);
+		
+
+		if(DHT11_GetCondition()+MQ2_GetCondition()+BH1750_GetCondition()>1)
+		{
+			LED_ON();
+			Buzzer_ON();
+			Servo_Start_CW();
+			osDelay(500);
+
+			Buzzer_OFF();
+			LED_OFF();
+			Servo_Stop();
+			osDelay(500);
+		}
+		else osDelay(1000);
 	}
 }

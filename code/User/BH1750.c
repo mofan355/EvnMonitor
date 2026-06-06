@@ -11,7 +11,7 @@ extern I2C_HandleTypeDef hi2c1;
 int ACK=0;
 uint8_t BH1750_count=0;
 uint8_t BH1750_Buf[2];
-uint16_t BH1750_AlertLine=5000;
+uint16_t BH1750_AlertLine=25;
 float BH1750_LightIntensity = 0;
 
 void BH1750_Init_Cmd(void)
@@ -327,6 +327,12 @@ void Show_BH1750_AlterValueUI(uint8_t option)
 
         osDelay(100);
     }
+}
+
+uint8_t BH1750_GetCondition(void)
+{
+    if(BH1750_LightIntensity<BH1750_AlertLine) return 1;
+    return 0;
 }
 
 extern osEventFlagsId_t KeyFinishedEventGroup;

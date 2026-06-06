@@ -32,6 +32,8 @@
 #include "adc.h"
 #include "BH1750.h"
 #include "stdio.h"
+#include "LED.h"
+#include "Buzzer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -101,6 +103,8 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim2);
+  HAL_TIM_PWM_Start(&htim2,TIM_CHANNEL_3);
+
   HAL_TIM_Base_Start(&htim3);
 
   OLED_Init();
@@ -108,6 +112,8 @@ int main(void)
   Key_Init();
   MX_ADC1_Init();
   BH1750_Init();
+  LED_Init();
+  Buzzer_Init();
   HAL_Delay(3000);
   /* USER CODE END 2 */
 

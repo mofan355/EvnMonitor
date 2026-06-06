@@ -60,7 +60,7 @@ void OLED_DrawArc(int16_t X, int16_t Y, uint8_t Radius, int16_t StartAngle, int1
 extern uint8_t OLED_DisplayBuf[8][128];
 
 void Show_UI(void);
-
+uint8_t AlertCondition(void);
 void OLED_FlashTask(void *argument);
 #endif
 

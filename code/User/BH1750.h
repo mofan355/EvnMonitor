@@ -41,6 +41,7 @@ void BH1750_ReceiveData(uint8_t addr,uint8_t *data,uint16_t len);
 void Show_BH1750UI(void);
 void Show_BH1750UI2(void);
 void Show_BH1750_AlterValueUI(uint8_t option);
+uint8_t BH1750_GetCondition(void);
 void BH1750Task(void *argument);
 
 #endif

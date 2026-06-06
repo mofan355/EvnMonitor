@@ -77,8 +77,13 @@ const osThreadAttr_t BH1750Task_attributes = {
   .priority = (osPriority_t) osPriorityNormal3,
 };
 
+// osThreadId AlertTaskHandle;
+// const osThreadAttr_t AlertTask_attributes={
+//   .name="AlertTask",
+//   .stack_size =128*4,
+//   .priority =(osPriority_t)osPriorityNormal2,
+// };
 
-// EventGroupHandle_t KeyFinishedEventGroup;
 osEventFlagsId_t KeyFinishedEventGroup;
 const osEventFlagsAttr_t KeyFinishedEventGroup_attributes={
   .name="KeyFinishedEventGroup",

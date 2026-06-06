@@ -9,7 +9,7 @@ extern osEventFlagsId_t KeyFinishedEventGroup;
 uint8_t MQ2_count=0;
 uint32_t MQ2_ADC_Data=0;
 float MQ2_Data=0;
-float MQ2_AlertLine=2.0f;
+float MQ2_AlertLine=2.5f;
 
 void MQ2_GetData(void)
 {
@@ -21,7 +21,7 @@ void MQ2_GetData(void)
 /*
 0.5V ~ 1.0V	纯净空气、无燃气、无烟雾	气敏电阻 最大，导电最弱，环境非常干净
 1.0V ~ 2.0V	正常室内空气	日常室内轻微杂味，无泄漏
-2.0V ~ 3.0V	轻微烟雾 / 微量燃气	开始有气体，可设为预警线
+2.0V ~ 3.0V	轻微烟雾 / 微量燃气	开始有气体
 3.0V ~ 4.0V	明显燃气 / 烟雾	泄漏明显，报警
 4.0V ~ 5.0V	高浓度燃气 / 浓烟	危险浓度，严重泄漏
 */
@@ -156,6 +156,12 @@ void Show_MQ2_AlterValueUI(uint8_t option)
 
         osDelay(100);
     }
+}
+
+uint8_t MQ2_GetCondition(void)
+{
+    if(MQ2_Data>MQ2_AlertLine) return 1;
+    return 0;
 }
 
 extern osMutexId_t Mutex1Handle;
