@@ -29,7 +29,7 @@
 #include "DHT11.h"
 #include "MQ2.h"
 #include "BH1750.h"
-#include "event_groups.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -174,6 +174,7 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
+    printf("Õ»Ê£Óà£º%d ×Ö\n", uxTaskGetStackHighWaterMark(OLED_FlashTaskHandle));
     osDelay(1);
   }
   /* USER CODE END StartDefaultTask */
