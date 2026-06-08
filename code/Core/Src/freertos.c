@@ -30,6 +30,9 @@
 #include "MQ2.h"
 #include "BH1750.h"
 #include "stdio.h"
+#include "LED.h"
+#include "Buzzer.h"
+#include "Servo.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,37 +55,37 @@
 osThreadId_t OLED_FlashTaskHandle;
 const osThreadAttr_t OLED_FlashTask_attributes = {
   .name = "OLED_FlashTask",
-  .stack_size = 512 * 4,
+  .stack_size = 512 * 2,
   .priority = (osPriority_t) osPriorityNormal,
 };
 
 osThreadId_t DHT11TaskHandle;
 const osThreadAttr_t DHT11Task_attributes = {
   .name = "DHT11Task",
-  .stack_size = 512 * 4,
+  .stack_size = 256 * 2,
   .priority = (osPriority_t) osPriorityNormal2,
 };
 
 osThreadId_t MQ2TaskHandle;
 const osThreadAttr_t MQ2Task_attributes = {
   .name = "MQ2Task",
-  .stack_size = 512 * 4,
+  .stack_size = 512 * 2,
   .priority = (osPriority_t) osPriorityNormal2,
 };
 
 osThreadId_t BH1750TaskHandle;
 const osThreadAttr_t BH1750Task_attributes = {
   .name = "BH1750Task",
-  .stack_size = 512 * 4,
-  .priority = (osPriority_t) osPriorityNormal3,
+  .stack_size = 512 * 2,
+  .priority = (osPriority_t) osPriorityNormal2,
 };
 
-// osThreadId AlertTaskHandle;
-// const osThreadAttr_t AlertTask_attributes={
-//   .name="AlertTask",
-//   .stack_size =128*4,
-//   .priority =(osPriority_t)osPriorityNormal2,
-// };
+osThreadId AlertTaskHandle;
+const osThreadAttr_t AlertTask_attributes={
+  .name="AlertTask",
+  .stack_size =256*2,
+  .priority =(osPriority_t)osPriorityNormal,
+};
 
 osEventFlagsId_t KeyFinishedEventGroup;
 const osEventFlagsAttr_t KeyFinishedEventGroup_attributes={
@@ -96,17 +99,42 @@ const osMutexAttr_t Mutex1_attributes ={
   .name="Mutex1",
   .attr_bits=osMutexPrioInherit,
 };
+
+UBaseType_t oled_watermark;
+UBaseType_t dht11_watermark;
+UBaseType_t mq2_watermark;
+UBaseType_t bh1750_watermark;
+UBaseType_t alert_watermark;
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
-  .stack_size = 128 * 4,
+  .stack_size = 256 * 2,
   .priority = (osPriority_t) osPriorityNormal,
 };
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
+void AlertTask(void *argument)
+{
+  while(1)
+  {
+    if(DHT11_GetCondition()+MQ2_GetCondition()+BH1750_GetCondition()>1)
+      {
+        LED_ON();
+        Buzzer_ON();
+        Servo_Start_CW();
+        osDelay(100);
+
+        Buzzer_OFF();
+        LED_OFF();
+        Servo_Stop();
+      }
+
+      osDelay(100);
+  }
+}
 
 /* USER CODE END FunctionPrototypes */
 
@@ -151,6 +179,7 @@ void MX_FREERTOS_Init(void) {
   DHT11TaskHandle = osThreadNew(DHT11Task, NULL, &DHT11Task_attributes);
   MQ2TaskHandle = osThreadNew(MQ2Task, NULL, &MQ2Task_attributes);
   BH1750TaskHandle = osThreadNew(BH1750Task,NULL, &BH1750Task_attributes);
+  AlertTaskHandle=osThreadNew(AlertTask,NULL,&AlertTask_attributes);
   /* USER CODE END RTOS_THREADS */
 
   /* USER CODE BEGIN RTOS_EVENTS */
@@ -174,7 +203,11 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    printf("Õ»Ê£Óà£º%d ×Ö\n", uxTaskGetStackHighWaterMark(OLED_FlashTaskHandle));
+    oled_watermark = uxTaskGetStackHighWaterMark(OLED_FlashTaskHandle);
+    dht11_watermark = uxTaskGetStackHighWaterMark(DHT11TaskHandle);
+    mq2_watermark = uxTaskGetStackHighWaterMark(MQ2TaskHandle);
+    bh1750_watermark = uxTaskGetStackHighWaterMark(BH1750TaskHandle);
+    alert_watermark =uxTaskGetStackHighWaterMark(AlertTaskHandle);
     osDelay(1);
   }
   /* USER CODE END StartDefaultTask */

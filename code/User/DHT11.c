@@ -228,6 +228,10 @@ void Show_DHT11_AlterValueUI(uint8_t option)
         {
             OLED_ReverseArea(63,32,16,16);
         }
+        else if(option==4)
+        {
+            OLED_ReverseArea(87,32,16,16);
+        }
         OLED_Update();
 
         osDelay(100);

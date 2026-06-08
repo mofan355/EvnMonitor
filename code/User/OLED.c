@@ -1565,18 +1565,6 @@ void OLED_FlashTask(void *argument)
 
 		Show_UI();
 		
-		if(DHT11_GetCondition()+MQ2_GetCondition()+BH1750_GetCondition()>1)
-		{
-			LED_ON();
-			Buzzer_ON();
-			Servo_Start_CW();
-			osDelay(100);
-
-			Buzzer_OFF();
-			LED_OFF();
-			Servo_Stop();
-			osDelay(100);
-		}
-		else osDelay(100);
+		osDelay(100);
 	}
 }
