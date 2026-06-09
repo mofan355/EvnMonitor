@@ -6,7 +6,7 @@ stm32f103c8t6+DHTT1+
     从PCtoLCD2002取模软件中取模所需中文字符字模并添加到OLED_Data.c的中文字模数组const ChineseCell_t OLED_CF16x16[]中
   5.31-1
     1.完成初始界面
-    2.创建任务DHT11模块通信成功，并稳定输出温湿度信息
+    2.创建任务DHT11Task且对应模块通信成功，并稳定输出温湿度信息
   6.1
     添加按键功能;创建事件组KeyFinishedEventGroup以避免高优先级的多个任务抢占使用权
   6.3
@@ -17,5 +17,18 @@ stm32f103c8t6+DHTT1+
         2.0V ~ 3.0V	轻微烟雾 / 微量燃气	开始有气体，可设为预警线
         3.0V ~ 4.0V	明显燃气 / 烟雾	泄漏明显，报警
         4.0V ~ 5.0V	高浓度燃气 / 浓烟	危险浓度，严重泄漏
-    3. 配置引脚pb6和pb7分别为光强度传感器BH1750的SCL和SDA引脚,以实现软件i2c控制BH1750和获取光照强度
+    3. 配置引脚pb6和pb7分别为光强度传感器BH1750的SCL和SDA引脚,以实现软件i2c控制BH1750和获取光照强度,按光照强度划分如下等级:
+            极暗（黑夜 / 月夜）
+            BH1750_LightIntensity < 10
+            暗（室内弱光 / 傍晚）
+            10 ≤ BH1750_LightIntensity < 50
+            中等（室内正常照明）
+            50 ≤ BH1750_LightIntensity < 500
+            亮（窗边 / 室外阴天）
+            500 ≤ BH1750_LightIntensity < 5000
+            极亮（晴天直射）
+            BH1750_LightIntensity ≥ 5000
+    4.创建任务MQ2Task和BH1750Task,并给所有模块的任务暂时都分配512*4字节的栈,优先级为osPriorityNormal2
+    5.创建互斥量Mutex1,让各传感器的通信相互独立
+    6.完成MQ2和BH1750模块数据显示
   
