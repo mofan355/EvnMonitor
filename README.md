@@ -41,3 +41,4 @@ stm32f103c8t6+DHTT1+
   6.8
     1.将报警功能独立出来,创建任务AlertTask,解决在修改报警线数值的界面中的bug
     2.使用freertos栈溢出和栈监测功能合理地对OLEDTask等任务进行栈分配和对freertos堆的分配
+    3.修复DHT11修改第四个报警值时的显示问题
