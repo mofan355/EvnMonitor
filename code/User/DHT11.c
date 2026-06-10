@@ -101,7 +101,7 @@ void DHT11Receive(uint8_t *buf)
 int DHT11_Check(uint8_t *buf)
 {
     uint16_t sum = buf[0] + buf[1] + buf[2] + buf[3];
-    if(sum < buf[4]+3 && sum > buf[4]-3) return 0;
+    if((sum&0xFF)==buf[4]) return 0;
     else return -1;
 }
 
@@ -119,10 +119,13 @@ void Show_DHT11UI(void)
         }
         else 
         {
-            OLED_ShowString(1,23, "Error", OLED_8X16);
-            OLED_ShowString(1,46, "Error", OLED_8X16);
+            OLED_ShowString(1,23, "DErro", OLED_8X16);
+            OLED_ShowString(1,46, "DErro", OLED_8X16);
         }
     }
+    // OLED_Printf(1,22,OLED_8X16,"%d.%d",DHT11_data_buf[2],DHT11_data_buf[3]);
+    //         OLED_Printf(1,43,OLED_8X16,"%d.%d%%",DHT11_data_buf[0],DHT11_data_buf[1]);
+    //         OLED_ShowImage(33, 22, 12, 16, Celsius);
 }
 
 void Show_DHT11UI2(void)

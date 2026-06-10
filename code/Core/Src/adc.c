@@ -60,5 +60,6 @@ uint32_t ADC_GetValue(void)
 {
     HAL_ADC_Start(&hadc1);
     while(HAL_ADC_PollForConversion(&hadc1, 1000) != HAL_OK);
+    HAL_ADC_Stop(&hadc1);
     return HAL_ADC_GetValue(&hadc1);
 }
