@@ -8,7 +8,6 @@
 
 extern osEventFlagsId_t KeyFinishedEventGroup;
 
-uint8_t DHT11_count= 0;
 uint8_t DHT11_data_buf[5] = {1};
 uint8_t DHT11_AlertLine[4]={70,0,35,0};
 GPIO_InitTypeDef GPIO_InitStructure;
@@ -268,7 +267,6 @@ void DHT11Task(void *argument)
         osMutexAcquire(Mutex1Handle,osWaitForever);
         DHT11Start();
         DHT11Receive(DHT11_data_buf);
-        DHT11_count++;
         osMutexRelease(Mutex1Handle);
         osDelay(1000);
     }

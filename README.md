@@ -43,4 +43,5 @@ stm32f103c8t6+DHTT1+
     2.使用freertos栈溢出和栈监测功能合理地对OLEDTask等任务进行栈分配和对freertos堆的分配
     3.修复DHT11修改第四个报警值时的显示问题
   6.10
-    修复dht11模块DHT11_Check()函数的校验问题
+    1.修复dht11模块DHT11_Check()函数的校验问题
+    2.删除了一些测试时使用的变量

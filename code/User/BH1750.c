@@ -9,7 +9,6 @@
 extern I2C_HandleTypeDef hi2c1;
 
 int ACK=0;
-uint8_t BH1750_count=0;
 uint8_t BH1750_Buf[2];
 uint16_t BH1750_AlertLine=25;
 float BH1750_LightIntensity = 0;
@@ -347,7 +346,6 @@ void BH1750Task(void *argument)
         osDelay(200);
         BH1750_ReceiveData(BH1750_ADDR_L,BH1750_Buf, 2);
         BH1750_LightIntensity = (float)(((uint16_t)BH1750_Buf[0]<<8)|BH1750_Buf[1]) / 1.2;
-        BH1750_count++;
         osMutexRelease(Mutex1Handle);
         
         osDelay(1000);

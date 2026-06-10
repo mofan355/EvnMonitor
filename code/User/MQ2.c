@@ -6,7 +6,6 @@
 
 extern osEventFlagsId_t KeyFinishedEventGroup;
 
-uint8_t MQ2_count=0;
 uint32_t MQ2_ADC_Data=0;
 float MQ2_Data=0;
 float MQ2_AlertLine=2.5f;
@@ -28,13 +27,12 @@ void MQ2_GetData(void)
 void Show_MQ2UI(void)
 {
     // OLED_ShowFloatNum(56,50,MQ2_Data,2,2,OLED_8X16);
-    // OLED_ShowNum(56,50,MQ2_count,5,OLED_8X16);
     // return;
-    if(MQ2_Data < 0.5f)
+    if(MQ2_Data < 0.15f)
     {
         OLED_ShowString(68,50,"无气体",OLED_8X16);
     }
-    else if(MQ2_Data>=0.5f && MQ2_Data < 3.0f)
+    else if(MQ2_Data>=0.15f && MQ2_Data < 3.0f)
     {
         OLED_ShowString(68,50,"正  常",OLED_8X16);
     }
@@ -172,7 +170,6 @@ void MQ2Task(void *argument)
         osEventFlagsWait(KeyFinishedEventGroup,0x01,osFlagsWaitAny|osFlagsNoClear,osWaitForever);
         osMutexAcquire(Mutex1Handle,osWaitForever);
         MQ2_GetData();
-        MQ2_count++;
         osMutexRelease(Mutex1Handle);
         osDelay(1000);
     }
