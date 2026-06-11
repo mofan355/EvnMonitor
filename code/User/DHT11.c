@@ -65,8 +65,6 @@ void DHT11Start(void)
             OLED_Update();
             return;
         }
-        // OLED_ShowNum(1,23, timeout, 4, OLED_8X16);
-        // OLED_Update();
     }
 }
 
@@ -90,11 +88,19 @@ void DHT11Receive(uint8_t *buf)
                     return;
                 }
             }
-            if(t>40) buf[i] |= (1 << (7-j));
-            else if(t>26) buf[i] &= ~(1 << (7-j));
+            if(t>35) buf[i] |= (1 << (7-j));
+            else if(t>15) buf[i] &= ~(1 << (7-j));
         }
     }
     DHT11_data(GPIO_PIN_SET);
+}
+
+void DHT11_Show_AllData(void)
+{
+    OLED_Printf(1,16,OLED_8X16,"%d.%d",DHT11_data_buf[0],DHT11_data_buf[1]);
+    OLED_Printf(1,32,OLED_8X16,"%d.%d",DHT11_data_buf[2],DHT11_data_buf[3]);
+    OLED_Printf(1,48,OLED_8X16,"%d",DHT11_data_buf[4]);
+    OLED_Update();
 }
 
 int DHT11_Check(uint8_t *buf)
@@ -106,8 +112,6 @@ int DHT11_Check(uint8_t *buf)
 
 void Show_DHT11UI(void)
 {   
-    // OLED_ShowNum(1,22,DHT11_count,5,OLED_8X16);
-    // return;
     if(DHT11_data_buf[0]+DHT11_data_buf[1]>0)
     {
         if(DHT11_Check(DHT11_data_buf) == 0)
@@ -122,9 +126,6 @@ void Show_DHT11UI(void)
             OLED_ShowString(1,46, "DErro", OLED_8X16);
         }
     }
-    // OLED_Printf(1,22,OLED_8X16,"%d.%d",DHT11_data_buf[2],DHT11_data_buf[3]);
-    //         OLED_Printf(1,43,OLED_8X16,"%d.%d%%",DHT11_data_buf[0],DHT11_data_buf[1]);
-    //         OLED_ShowImage(33, 22, 12, 16, Celsius);
 }
 
 void Show_DHT11UI2(void)
