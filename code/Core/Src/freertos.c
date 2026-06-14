@@ -129,8 +129,8 @@ void AlertTask(void *argument)
 
         Buzzer_OFF();
         LED_OFF();
-        Servo_Stop();
       }
+      else Servo_Stop();
 
       osDelay(100);
   }
