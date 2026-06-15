@@ -269,7 +269,7 @@ void DHT11Task(void *argument)
         osMutexAcquire(Mutex1Handle,osWaitForever);
         DHT11Start();
         DHT11Receive(DHT11_data_buf);
-        uart_printf_rtos("ÎÂÊª¶È£º%d.%d,%d.%d,%d\r\n",DHT11_data_buf[0],DHT11_data_buf[1],DHT11_data_buf[2],DHT11_data_buf[3],DHT11_data_buf[4]);
+        uart_printf_rtos("Êª¶È£º%d.%d%%RH,ÎÂ¶È£º%d.%d¡æ,%d\r\n",DHT11_data_buf[0],DHT11_data_buf[1],DHT11_data_buf[2],DHT11_data_buf[3],DHT11_data_buf[4]);
         osMutexRelease(Mutex1Handle);
         osDelay(1000);
     }

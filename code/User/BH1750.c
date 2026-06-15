@@ -347,7 +347,7 @@ void BH1750Task(void *argument)
         osDelay(200);
         BH1750_ReceiveData(BH1750_ADDR_L,BH1750_Buf, 2);
         BH1750_LightIntensity = (float)(((uint16_t)BH1750_Buf[0]<<8)|BH1750_Buf[1]) / 1.2;
-        uart_printf_rtos("光照：%.2f\r\n",BH1750_LightIntensity);
+        uart_printf_rtos("光照强度：%.2flx\r\n",BH1750_LightIntensity);
         osMutexRelease(Mutex1Handle);
         
         osDelay(1000);
