@@ -113,13 +113,22 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-int fputc(int ch, FILE *f)
+#include "stdarg.h"
+#include "string.h"
+
+extern osEventFlagsId_t KeyFinishedEventGroup;
+extern osMutexId_t Mutex1Handle;
+void uart_printf_rtos(const char *fmt, ...)
 {
-  uint8_t c = (uint8_t)ch;
-  if (HAL_UART_Transmit(&huart1, &c, 1, 100) == HAL_OK)
-  {
-    return ch;
-  }
-  return -1;
+    char buf[128];
+    va_list args;
+
+    va_start(args, fmt);
+    vsnprintf(buf, sizeof(buf), fmt, args);
+    va_end(args);
+
+    HAL_UART_Transmit(&huart1, (uint8_t *)buf, strlen(buf), 100);
+
+    osMutexRelease(Mutex1Handle);
 }
 /* USER CODE END 1 */

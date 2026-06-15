@@ -3,6 +3,7 @@
 #include "cmsis_os.h"
 #include "OLED.h"
 #include "Key.h"
+#include "usart.h"
 
 extern osEventFlagsId_t KeyFinishedEventGroup;
 
@@ -170,6 +171,7 @@ void MQ2Task(void *argument)
         osEventFlagsWait(KeyFinishedEventGroup,0x01,osFlagsWaitAny|osFlagsNoClear,osWaitForever);
         osMutexAcquire(Mutex1Handle,osWaitForever);
         MQ2_GetData();
+        uart_printf_rtos("—ÃŒÌ≈®∂»£∫%.2f\r\n",MQ2_Data);
         osMutexRelease(Mutex1Handle);
         osDelay(1000);
     }

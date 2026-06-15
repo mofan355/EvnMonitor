@@ -1,4 +1,5 @@
-stm32f103c8t6、DHTT1、MQ2、BH1750、360°MG90S舵机、LED、OLED、有源蜂鸣器
+本项目为基于 STM32 的智能环境监测终端开发，实现光照、烟雾浓度、温湿度的精准检测并发出警告和模拟应警措施
+使用到的模块有stm32f103c8t6、DHTT1、MQ2、BH1750、360°MG90S舵机、LED、OLED、有源蜂鸣器
 
 log:
 2026
@@ -51,3 +52,5 @@ log:
     根据逻辑分析仪，对DHT11的波形进行分析，调整高低电平的判断条件，进一步稳定mcu与DHT11间的通信
   6.14
     修复舵机运行卡顿的现象
+  6.15
+    自定义函数void uart_printf_rtos(const char *fmt, ...)调用HAL_UART_Transmit发送信息给上位机

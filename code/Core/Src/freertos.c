@@ -33,6 +33,7 @@
 #include "LED.h"
 #include "Buzzer.h"
 #include "Servo.h"
+#include "usart.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
