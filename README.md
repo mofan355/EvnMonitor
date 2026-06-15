@@ -1,5 +1,9 @@
 本项目为基于 STM32 的智能环境监测终端开发，实现光照、烟雾浓度、温湿度的精准检测并发出警告和模拟应警措施
 使用到的模块有stm32f103c8t6、DHTT1、MQ2、BH1750、360°MG90S舵机、LED、OLED、有源蜂鸣器
+效果视频：https://www.bilibili.com/video/BV1b9J36eEhe/?spm_id_from=333.1387.list.card_archive.click&vd_source=7d0d7a57140f407a6a251ec7df2b29df
+![初始界面](images/environment1.jpg)
+![uart通信](images/uart.png)
+![引脚定义图](images/STM32F103C8T6引脚定义.png)
 
 log:
 2026

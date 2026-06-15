@@ -128,7 +128,5 @@ void uart_printf_rtos(const char *fmt, ...)
     va_end(args);
 
     HAL_UART_Transmit(&huart1, (uint8_t *)buf, strlen(buf), 100);
-
-    osMutexRelease(Mutex1Handle);
 }
 /* USER CODE END 1 */
